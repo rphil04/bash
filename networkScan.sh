@@ -3,9 +3,9 @@
 # ===================================================
 # Network Device Scanner
 # ===================================================
-# Author: Noytou
-# Date: 2024-06-10
-# Version: 1.0
+# Author: noytou
+# Date: 2024-06-11
+# Version: 1.4
 #
 # Description:
 # ------------
@@ -40,8 +40,6 @@
 #
 # ===================================================
 
-#!/bin/bash
-
 # Directory and file to store previous scan results
 SCAN_DIRECTORY="/home/scans"
 PREVIOUS_SCAN_FILE="$SCAN_DIRECTORY/previous_scan.json"
@@ -52,10 +50,16 @@ mkdir -p "$SCAN_DIRECTORY"
 # Function to scan the network
 scan_network() {
     local ip_range="$1"
-    sudo arp-scan --interface=eth0 --localnet | grep -E "^[0-9]" | awk '{print $1, $2}' | while read ip mac; do
-        hostname=$(nslookup "$ip" 2>/dev/null | awk -F'= ' 'NR==5 {print $2}')
+    # Replace 'wlan0' with your actual network interface name
+    sudo arp-scan --interface=wlp4s0  --localnet | grep -E "^[0-9]" | awk '{print $1, $2}' | sort | uniq | while read ip mac; do
+        # Try to resolve the hostname using getent
+        hostname=$(getent hosts "$ip" | awk '{print $2}')
         if [ -z "$hostname" ]; then
-            hostname="Unknown"
+            # Fallback to nslookup if getent fails
+            hostname=$(nslookup "$ip" 2>/dev/null | awk -F'= ' 'NR==5 {print $2}')
+            if [ -z "$hostname" ]; then
+                hostname="Unknown"
+            fi
         fi
         # Output each line as a JSON object
         echo "{\"ip\":\"$ip\",\"mac\":\"$mac\",\"hostname\":\"$hostname\"}"
