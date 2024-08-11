@@ -19,7 +19,7 @@
 # ------
 # - Customize the IP range according to your network configuration.
 # - Run the script with appropriate permissions.
-# - View the scan results in the /home/scans directory.
+# - View the scan results in the /usr/local/bin/ directory.
 #
 # IP Range:
 # ---------
@@ -36,12 +36,12 @@
 #
 # Output:
 # -------
-# - The results are saved to /home/scans/previous_scan.json.
+# - The results are saved to /usr/local/bin/previous_scan.json.
 #
 # ===================================================
 
 # Directory and file to store previous scan results
-SCAN_DIRECTORY="/home/scans"
+SCAN_DIRECTORY="/usr/local/bin"
 PREVIOUS_SCAN_FILE="$SCAN_DIRECTORY/previous_scan.json"
 
 # Ensure the scan directory exists
