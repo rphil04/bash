@@ -40,6 +40,8 @@
 #
 # ===================================================
 
+#!/bin/bash
+
 # Directory and file to store previous scan results
 SCAN_DIRECTORY="/home/scans"
 PREVIOUS_SCAN_FILE="$SCAN_DIRECTORY/previous_scan.json"
@@ -55,6 +57,7 @@ scan_network() {
         if [ -z "$hostname" ]; then
             hostname="Unknown"
         fi
+        # Output each line as a JSON object
         echo "{\"ip\":\"$ip\",\"mac\":\"$mac\",\"hostname\":\"$hostname\"}"
     done
 }
@@ -114,7 +117,14 @@ display_devices() {
 IP_RANGE="192.168.0.0/24"
 
 echo "Scanning network..."
-current_scan=$(scan_network "$IP_RANGE" | jq -s '.')
+current_scan=$(scan_network "$IP_RANGE")
+
+# Debugging output: Print the scan results before processing with jq
+echo "Raw scan output:"
+echo "$current_scan"
+
+# Process scan results as JSON
+current_scan=$(echo "$current_scan" | jq -s '.')
 
 previous_scan=$(load_previous_scan)
 
