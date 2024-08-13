@@ -8,7 +8,7 @@
 # provides two strategies:
 #
 # Strategy 1: Set Positions
-#     Divides skaters into forwards and defensemen, then calculates the time
+#     Divides skaters into forwards and defense, then calculates the time
 #     on ice and expected shifts for each position.
 #
 # Strategy 2: No Set Positions
@@ -18,7 +18,7 @@
 # ----------
 # calculate_time(skaters, shift_duration)
 #     Calculates and prints the time on ice and expected shifts for forwards,
-#     defensemen, and for a scenario without set positions.
+#     defense, and for a scenario without set positions.
 #
 # Usage:
 # ------
@@ -35,7 +35,7 @@ calculate_time() {
     case $skaters in
         5)  forwards=3; defense=2 ;;
         6)  forwards=4; defense=2 ;;
-        7)  forwards=4; defense=3 ;;  # Adjusted for 7 skaters
+        7)  forwards=4; defense=3 ;;
         8|9)  forwards=$((skaters - 3)); defense=3 ;;
         10) forwards=6; defense=4 ;;
         11) forwards=7; defense=4 ;;
@@ -57,19 +57,19 @@ calculate_time() {
 
     echo -e "\033[0;32mStrategy 1: Set Positions\033[0m"
     echo -e "  Number of Forwards: \033[0;32m$forwards\033[0m"
-    echo -e "  Time on Ice per Forward: \033[0;32m$time_on_ice minutes\033[0m"
-    echo -e "  Expected Shifts per Forward: \033[0;32m$shifts_per_forward shifts\033[0m"
+    echo -e "  Time on ice per Forward: \033[0;32m$time_on_ice minutes\033[0m"
+    echo -e "  Expected shifts per Forward: \033[0;32m$shifts_per_forward shifts\033[0m"
     echo -e "  Number of Defense: \033[0;34m$defense\033[0m"
-    echo -e "  Time on Ice per Defenseman: \033[0;34m$defense_time_on_ice minutes\033[0m"
-    echo -e "  Expected Shifts per Defenseman: \033[0;34m$shifts_per_defense shifts\033[0m"
+    echo -e "  Time on ice per Defense: \033[0;34m$defense_time_on_ice minutes\033[0m"
+    echo -e "  Expected shifts per Defense: \033[0;34m$shifts_per_defense shifts\033[0m"
 
     # Strategy 2: No Set Positions
     local time_on_ice_2=$(echo "scale=2; $game_duration * 60 / $skaters / $shift_duration" | bc)
     local shifts_per_player=$(echo "$total_shifts / $skaters" | bc)
 
     echo -e "\n\033[0;34mStrategy 2: No Set Positions\033[0m"
-    echo -e "  Time on Ice per Player: \033[0;32m$time_on_ice_2 minutes\033[0m"
-    echo -e "  Expected Shifts per Player: \033[0;34m$shifts_per_player shifts\033[0m"
+    echo -e "  Time on ice per Player: \033[0;32m$time_on_ice_2 minutes\033[0m"
+    echo -e "  Expected shifts per Player: \033[0;34m$shifts_per_player shifts\033[0m"
 }
 
 echo "Hockey Lineup Ice Time Calculator"
@@ -81,4 +81,4 @@ fi
 
 read -p "Enter the shift duration (in seconds): " shift_duration
 
-calculate_time $skaters $shift_duration
+calculate_time "$skaters" "$shift_duration"
